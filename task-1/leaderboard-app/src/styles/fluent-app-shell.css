@@ -1,0 +1,32 @@
+/* App shell: layout and body chrome only. Theme tokens: fluent9-tokens.css (regenerate
+ * from devtools: paste `src/styles/fluent9-paste.txt` or pipe stdin, `npm run build:fluent9`). */
+
+html {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  box-sizing: border-box;
+  /* Page behind the web part; inner `.leaderboard_2943a085` uses #f8fafc */
+  background: rgb(235, 235, 237);
+  color: #0f172a;
+  font-family:
+    Segoe UI, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  min-height: 100vh;
+  padding: 24px;
+  transition: background-color 0.3s, color 0.3s;
+  -webkit-font-smoothing: antialiased;
+  user-select: text;
+  line-height: inherit;
+  text-align: left;
+  font-size: var(--fontSizeBase300, 14px);
+  font-weight: var(--fontWeightRegular, 400);
+}
+
+#root {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+  min-width: 0;
+}

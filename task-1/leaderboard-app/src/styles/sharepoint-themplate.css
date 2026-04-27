@@ -1,0 +1,182 @@
+/* SharePoint page overrides (see task-1/reference/themplate_css.txt) — inert in standalone Vite, harmless if merged. */
+.sp-appBar {
+  display: none !important;
+}
+
+div[data-sp-feature-tag^="PageHierarchyWebPart"] *:not(i) {
+  font-family: var(--fontFamilyCustomFont1000, var(--fontFamilyBase, "Segoe UI", sans-serif)) !important;
+}
+
+div[data-sp-feature-tag^="ScriptEditorWebPart"] .link-group .link-header-title {
+  font-family: var(--fontFamilyCustomFont1000, var(--fontFamilyBase, "Segoe UI", sans-serif));
+}
+
+@media (min-width: 1024px) {
+  div#spSiteHeader {
+    display: none;
+  }
+}
+
+a.ms-HubNav-nameLink {
+  font-weight: 600;
+}
+
+div[data-automation-id="pageHeader"] * {
+  color: black !important;
+}
+
+button.ms-HorizontalNavItem-Edit {
+  padding-bottom: 6px;
+}
+
+div[data-automationid="MinimalHeader"] {
+  align-items: baseline !important;
+}
+
+div.CanvasZone--fullWidth div[data-automation-id="imageRead"] > div,
+div.CanvasZone--fullWidth div[data-automation-id="imageRead"] img {
+  width: 100% !important;
+}
+
+div.CanvasZone--fullWidth img {
+  width: 100%;
+}
+
+div.CanvasZone--fullWidth div[role="presentation"] {
+  position: relative;
+  width: 100%;
+}
+
+.ms-Stack.ms-CardSection:first-child {
+  background-color: #ff6fff;
+}
+
+div[data-automation-id="HeroPatternElement"] a[data-automation-id="HeroCallToAction"] {
+  display: flex;
+  align-items: center;
+  color: black !important;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 140%;
+  text-decoration: none;
+}
+
+div[data-automation-id="HeroPatternElement"] a[data-automation-id="HeroCallToAction"] i {
+  margin-left: 8px;
+}
+
+div[data-automation-id="HighlightedContentWebPart"] .ms-DocumentCard {
+  box-shadow: none;
+  border-radius: 0;
+  border: 1px solid rgb(210, 210, 213) !important;
+  background-color: rgb(249, 249, 250) !important;
+}
+
+div[data-automation-id="HighlightedContentWebPart"] .ms-DocumentCard:hover {
+  box-shadow: none;
+}
+
+div[data-automation-id="clock-card"] {
+  width: 386px !important;
+}
+
+div[data-automation-id="clock-card"] div[data-automation-id="clock-card-location"] {
+  font-weight: 600;
+}
+
+.ms-FocusZone[data-automation-id="people-list"] div[data-layout="largeLayout"] {
+  background-color: rgb(249, 249, 250);
+  border: 1px solid rgb(210, 210, 213);
+  border-radius: 0;
+  box-shadow: none;
+  grid-template-rows: 99px 34px !important;
+  padding: 16px 0;
+  height: 100%;
+}
+
+.ms-FocusZone[data-automation-id="people-list"] div[data-layout="largeLayout"]:hover {
+  box-shadow: none;
+}
+
+.ms-FocusZone[data-automation-id="people-list"] a.ms-Link[data-automation-id="peopleLinkText"] {
+  background-color: rgb(249, 249, 250);
+  position: relative;
+  width: 100%;
+  white-space: unset;
+}
+
+div[data-automation-id="webPartHeader"] span a.ms-Link {
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+@keyframes date-blinking-orange {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    background-color: #ffc1b2;
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes date-blinking-pink {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    background-color: #ffccff;
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes date-blinking-green {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    background-color: #cdffd7;
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+div[data-sp-feature-tag^="CreateListItemButtonWebPart"] button {
+  width: 200px;
+  height: 50px;
+  font-size: 18px;
+}
+
+span.link-header-title {
+  font-weight: 600;
+}
+
+.wiki-Theme1,
+.wiki-Theme1 .link:hover {
+  background-color: #ff6a47 !important;
+}
+
+.wiki-Theme2,
+.wiki-Theme2 .link:hover {
+  background-color: #5afb7a !important;
+}
+
+.wiki-Theme3,
+.wiki-Theme3 .link:hover {
+  background-color: #ff6fff !important;
+}
+
+.wiki-Theme4,
+.wiki-Theme4 .link:hover {
+  background-color: #d0fc53 !important;
+}
+
+.wiki-Theme5,
+.wiki-Theme5 .link:hover {
+  background-color: #53abfc !important;
+}

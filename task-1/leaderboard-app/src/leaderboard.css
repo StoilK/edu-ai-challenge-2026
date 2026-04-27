@@ -1,0 +1,989 @@
+/*
+ * Leaderboard *web part* only (`.leaderboard_2943a085` and descendants).
+ * See `../../reference/themplate_css.txt` (site-wide SharePoint *custom* CSS) for context. It
+ * does not include the web part’s own bundle. To add rules from SharePoint: DevTools →
+ * Network → filter "css" (or "js") → look for a file whose name or URL includes
+ * `Leaderboard`, `webpart`, or a hash near your part → open, copy, paste here or
+ * one section at a time (header / filter row / podium / list row). Styles below use
+ * Fluent tokens from `fluent9-tokens.css` so the card tracks your theme.
+ */
+
+.leaderboard-wp--root.ms-SPLegacyFabricBlock {
+  color: var(--bodyText, var(--colorNeutralForeground1, #000));
+  font-family: var(--fontFamilyBase, "Segoe UI", "Segoe UI Web (West European)", -apple-system, system-ui, sans-serif);
+  -webkit-font-smoothing: antialiased;
+}
+
+.leaderboard_2943a085 {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--spacingVerticalXXXL, 32px);
+  background: #f8fafc;
+  border: none;
+  box-shadow: var(--shadow2, 0 0 2px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.14));
+  max-width: 100%;
+  color: var(--bodyText, var(--colorNeutralForeground1, #000));
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: var(--spacingVerticalL, 16px) var(--spacingHorizontalL, 16px);
+}
+
+.header_2943a085 {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+  border-bottom: none;
+}
+
+.headerContent_2943a085 {
+  -webkit-font-smoothing: antialiased;
+  user-select: text;
+  line-height: inherit;
+  text-align: left;
+  font-size: var(--fontSizeBase300, 14px);
+  font-weight: var(--fontWeightRegular, 400);
+  color: #0f172a;
+  font-family: Segoe UI, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Title h2 — SharePoint devtools: 24px, font-weight 700, #0f172a, margin 0 0 8px */
+.headerContent_2943a085 h2 {
+  margin: 0 0 8px;
+  font-size: var(--fontSizeBase600, 24px);
+  line-height: var(--lineHeightBase600, 32px);
+  font-weight: var(--fontWeightBold, 700);
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  font-family: Segoe UI, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  text-align: left;
+  letter-spacing: 0;
+}
+
+/* Subtitle p — SharePoint: #64748b, 14px, 400, margin 0 */
+.headerContent_2943a085 p {
+  margin: 0;
+  color: #64748b;
+  font-size: var(--fontSizeBase300, 14px);
+  font-weight: var(--fontWeightRegular, 400);
+  line-height: inherit;
+  -webkit-font-smoothing: antialiased;
+  text-align: left;
+  font-family: Segoe UI, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+}
+
+/* Filter bar, dropdown, search: see `src/styles/fluent-tokens.css` (SharePoint/Fluent match). */
+.filters_2943a085 {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 0 1 auto;
+  align-items: center;
+  min-width: 0;
+}
+
+.podium_2943a085 {
+  margin: 0 auto 64px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px 24px;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+/* SharePoint flex order: 2nd, 1st, 3rd in visual order (1st = center) */
+.podium_2943a085 .podiumColumn_2943a085.podiumRank2_2943a085 {
+  order: 1;
+}
+.podium_2943a085 .podiumColumn_2943a085.podiumRank1_2943a085 {
+  order: 2;
+}
+.podium_2943a085 .podiumColumn_2943a085.podiumRank3_2943a085 {
+  order: 3;
+}
+
+.podiumColumn_2943a085 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  box-sizing: border-box;
+  width: 280px;
+  min-width: 280px;
+  max-width: 280px;
+  flex: 0 0 280px;
+  margin-top: 0;
+}
+
+.podiumUser_2943a085 {
+  text-align: center;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.podium_2943a085 .podiumColumn_2943a085.podiumRank1_2943a085 {
+  align-items: center;
+  position: relative;
+  color: #0f172a;
+  font-family: Segoe UI, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  user-select: text;
+  line-height: inherit;
+  font-size: var(--fontSizeBase300, 14px);
+  font-weight: var(--fontWeightRegular, 400);
+  text-align: center;
+}
+
+.podium_2943a085 .podiumColumn_2943a085.podiumRank1_2943a085 .podiumUser_2943a085 {
+  text-align: center;
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.podiumAvatarContainer_2943a085 {
+  position: relative;
+  /* Size to the avatar, not the full name column — keeps the rank badge tied to the circle */
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 8px;
+  vertical-align: top;
+}
+
+/* 1st place: full-width flex centers the avatar; inline-flex + margin auto doesn’t work reliably in all cases */
+.podium_2943a085 .podiumColumn_2943a085.podiumRank1_2943a085 .podiumAvatarContainer_2943a085 {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin: 0 0 8px;
+}
+
+/* Square frame = positioning context: circle sits in box; badge vars set in Podium.tsx (px) */
+.podiumAvatarFrame_2943a085 {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  --podium-avatar-px: 88px;
+  --podium-badge-px: 36px;
+}
+
+.podiumAvatar_2943a085 {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--colorNeutralStroke1, #e1dfdd);
+  box-shadow: 0 0 0 1px #e2e8f0;
+}
+
+.podiumColumn_2943a085.podiumRank1_2943a085 .podiumAvatar_2943a085 {
+  /* Reference: thick gold/yellow ring on 1st */
+  border: 4px solid #facc15;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.podiumColumn_2943a085.podiumRank2_2943a085 .podiumAvatar_2943a085,
+.podiumColumn_2943a085.podiumRank3_2943a085 .podiumAvatar_2943a085 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #5eead4;
+  background-size: cover;
+  background-position: 50% 50%;
+  /* Reference: thin white — match the rank badge (2px) on 2/3 */
+  border: 2px solid #fff;
+  color: #134e4a;
+  font-weight: 700;
+  -webkit-font-smoothing: antialiased;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.podiumRankBadge_2943a085 {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  bottom: 0;
+  /* ~50% of the badge on the disc: center of the badge on the main circle (45° SE) */
+  transform: translate(
+    calc(
+      (var(--podium-avatar-px) / 2) * (1 + 0.70710678) - var(--podium-avatar-px) + var(--podium-badge-px) / 2
+    ),
+    calc(
+      (var(--podium-avatar-px) / 2) * (1 + 0.70710678) - var(--podium-avatar-px) + var(--podium-badge-px) / 2
+    )
+  );
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: 2px solid #fff;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+.podiumColumn_2943a085.podiumRank1_2943a085 .podiumRankBadge_2943a085 {
+  background: linear-gradient(180deg, #f0c13d 0%, #c9950c 100%);
+}
+
+.podiumColumn_2943a085.podiumRank2_2943a085 .podiumRankBadge_2943a085 {
+  background: linear-gradient(180deg, #9ca3af 0%, #6b7280 100%);
+}
+
+.podiumColumn_2943a085.podiumRank3_2943a085 .podiumRankBadge_2943a085 {
+  background: linear-gradient(180deg, #b8743d 0%, #8a5a2a 100%);
+}
+
+.podiumColumn_2943a085.podiumRank2_2943a085 .podiumRankBadge_2943a085,
+.podiumColumn_2943a085.podiumRank3_2943a085 .podiumRankBadge_2943a085 {
+  font-size: 14px;
+}
+
+.podiumColumn_2943a085.podiumRank1_2943a085 .podiumRankBadge_2943a085 {
+  font-size: 18px;
+}
+
+.podiumName_2943a085 {
+  margin: 0 0 4px;
+  text-align: center;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  word-wrap: break-word;
+}
+
+.podiumRole_2943a085 {
+  margin: 0 0 8px;
+  text-align: center;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: #64748b;
+  -webkit-font-smoothing: antialiased;
+}
+
+.podiumScore_2943a085 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-weight: 700;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+.podiumColumn_2943a085.podiumRank1_2943a085 .podiumScore_2943a085 {
+  width: 100px;
+  min-width: 100px;
+  max-width: 100px;
+  height: 44px;
+  min-height: 44px;
+  max-height: 44px;
+  margin: 4px auto 0;
+  padding: 0 6px;
+  border: 1px solid #fde047;
+  border-radius: 22px;
+  background: #fef9c3;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  font-size: 20px;
+  color: #ca8a04;
+}
+
+.podiumColumn_2943a085.podiumRank1_2943a085 .podiumScore_2943a085 .root-206 {
+  color: #ca8a04;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.podiumColumn_2943a085.podiumRank1_2943a085 .podiumScore_2943a085 .root-206 .fabricIconSvg {
+  width: 20px;
+  height: 20px;
+}
+
+.podiumColumn_2943a085.podiumRank2_2943a085 .podiumScore_2943a085,
+.podiumColumn_2943a085.podiumRank3_2943a085 .podiumScore_2943a085 {
+  width: 87px;
+  min-width: 87px;
+  max-width: 87px;
+  height: 37px;
+  min-height: 37px;
+  max-height: 37px;
+  margin: 0 auto 8px;
+  padding: 0 4px;
+  border: 1px solid #bfdbfe;
+  border-radius: 20px;
+  background: transparent;
+  box-shadow: none;
+  font-size: 18px;
+  font-weight: 700;
+  color: #3b82f6;
+}
+
+.podiumColumn_2943a085.podiumRank2_2943a085 .podiumScore_2943a085 .root-206,
+.podiumColumn_2943a085.podiumRank3_2943a085 .podiumScore_2943a085 .root-206 {
+  color: #3b82f6;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.podiumColumn_2943a085.podiumRank2_2943a085 .podiumScore_2943a085 .root-206 .fabricIconSvg,
+.podiumColumn_2943a085.podiumRank3_2943a085 .podiumScore_2943a085 .root-206 .fabricIconSvg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Plinth only sizes the area; the visible block (fill + top rim + round corners) is
+   a single box: `.podiumBlockTop_2943a085` so `border-top` + `border-radius` share one path (reference). */
+.podiumBlock_2943a085 {
+  box-sizing: border-box;
+  margin-top: 12px;
+  width: 100%;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.podiumColumn_2943a085.podiumRank1_2943a085 .podiumBlock_2943a085 {
+  width: 280px;
+  height: 160px;
+}
+
+.podiumColumn_2943a085.podiumRank2_2943a085 .podiumBlock_2943a085 {
+  width: 280px;
+  height: 145.6px;
+}
+
+.podiumColumn_2943a085.podiumRank3_2943a085 .podiumBlock_2943a085 {
+  width: 280px;
+  height: 113.6px;
+}
+
+.podiumBlockTop_2943a085 {
+  position: relative;
+  width: 100%;
+  min-height: 0;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-sizing: border-box;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+/* Glossy top “cap” — light strip, rounded, over the main fill (reference) */
+.podiumBlockTop_2943a085::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 8px;
+  border-radius: 5px 5px 0 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.06));
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset;
+}
+
+.podiumColumn_2943a085.podiumRank1_2943a085 .podiumBlockTop_2943a085 {
+  text-align: left;
+  color: #0f172a;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  user-select: text;
+  align-items: flex-start;
+  justify-content: center;
+  /* One surface: top rim is darker gold, follows 12px corner curve (ref). */
+  border: 1px solid rgba(180, 120, 10, 0.3);
+  border-top: 2px solid #b8860b;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  padding-top: 16px;
+  background: linear-gradient(180deg, #fff8e1, #fef3c7 8%, #fde68a 60%, #fcd34d 100%);
+}
+
+.podiumColumn_2943a085.podiumRank1_2943a085 .podiumBlockTop_2943a085::before {
+  display: none;
+}
+
+.podiumColumn_2943a085.podiumRank2_2943a085 .podiumBlockTop_2943a085,
+.podiumColumn_2943a085.podiumRank3_2943a085 .podiumBlockTop_2943a085 {
+  /* Silver plinth: subtle vertical grad + 2px top in darker grey (ref). */
+  background: linear-gradient(180deg, #f0f4f8 0%, #e2e8f0 45%, #dbe4ec 100%);
+  border: 1px solid #b8c2cc;
+  border-top: 2px solid #64748b;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.podiumColumn_2943a085.podiumRank2_2943a085 .podiumBlockTop_2943a085::before,
+.podiumColumn_2943a085.podiumRank3_2943a085 .podiumBlockTop_2943a085::before {
+  height: 6px;
+  border-radius: 6px 6px 0 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.02));
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+}
+
+.podiumRankNumber_2943a085 {
+  position: relative;
+  z-index: 1;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-weight: 900;
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.podiumColumn_2943a085.podiumRank1_2943a085 .podiumRankNumber_2943a085 {
+  font-size: 112px;
+  color: rgba(234, 179, 8, 0.2);
+}
+
+.podiumColumn_2943a085.podiumRank2_2943a085 .podiumRankNumber_2943a085,
+.podiumColumn_2943a085.podiumRank3_2943a085 .podiumRankNumber_2943a085 {
+  font-size: 96px;
+  color: rgba(148, 163, 184, 0.2);
+}
+
+/* List below podium — SharePoint / Fluent: column, max 1200px, Base300 body, left-aligned */
+.list_2943a085 {
+  -webkit-font-smoothing: antialiased;
+  user-select: text;
+  line-height: inherit;
+  text-align: left;
+  color: #0f172a;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: var(--fontSizeBase300, 14px);
+  font-weight: var(--fontWeightRegular, 400);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0 auto;
+  max-width: 1200px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 0 8px;
+}
+
+/* One card per entry: white, border, radius, soft shadow; 16px gap is on .list_2943a085. */
+.userRowContainer_2943a085 {
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  user-select: text;
+  line-height: inherit;
+  text-align: left;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  font-family: inherit;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 150ms var(--curveEasyEase, ease);
+}
+
+.userRowContainer_2943a085:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.07);
+}
+
+/* div.row — Fluent body row (Base300 / Regular, inherits to cells unless overridden). */
+.row_2943a085 {
+  -webkit-font-smoothing: antialiased;
+  user-select: text;
+  line-height: inherit;
+  text-align: left;
+  color: #0f172a;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: var(--fontSizeBase300, 14px);
+  font-weight: var(--fontWeightRegular, 400);
+  box-sizing: border-box;
+  min-height: 96px;
+  display: flex;
+  align-items: center;
+  padding: 20px 24px;
+  background: transparent;
+}
+
+.rowMain_2943a085 {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+
+.rowLeft_2943a085 {
+  display: flex;
+  flex: 1 1 280px;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.rank_2943a085 {
+  flex: 0 0 auto;
+  min-width: 32px;
+  -webkit-font-smoothing: antialiased;
+  user-select: text;
+  line-height: inherit;
+  text-align: center;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  color: #94a3b8;
+  font-size: 24px;
+  font-weight: var(--fontWeightBold, 700);
+}
+
+/* List row avatar — photo from inline `style`; 56px circle, SharePoint-reported values. */
+.avatar_2943a085 {
+  -webkit-font-smoothing: antialiased;
+  user-select: text;
+  line-height: inherit;
+  text-align: left;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 56px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 20px;
+  font-weight: var(--fontWeightBold, 700);
+  background-color: #fbbf24;
+  background-position: 50% 50%;
+  background-size: cover;
+}
+
+.info_2943a085 {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.name_2943a085 {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  user-select: text;
+  line-height: inherit;
+  text-align: left;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  color: #0f172a;
+  font-size: 18px;
+  font-weight: var(--fontWeightBold, 700);
+}
+
+.role_2943a085 {
+  display: block;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  user-select: text;
+  line-height: inherit;
+  text-align: left;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: var(--fontWeightRegular, 400);
+}
+
+.rowRight_2943a085 {
+  display: flex;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 24px;
+  min-width: 0;
+  -webkit-font-smoothing: antialiased;
+  user-select: text;
+  line-height: inherit;
+  text-align: left;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: var(--fontSizeBase300, 14px);
+  font-weight: var(--fontWeightRegular, 400);
+  color: #0f172a;
+}
+
+.categoryStats_2943a085 {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Flex row of icon+count groups (one per distinct activity category) */
+.categoryStats_2943a085 .ms-TooltipHost.categoryStatsHost_2943a085,
+.categoryStatsHost_2943a085 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+.root-207.ms-TooltipHost:not(.categoryStatsHost_2943a085) {
+  display: block;
+}
+
+.categoryStat_2943a085 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 32px;
+  text-align: center;
+}
+
+/* Fabric-style icon host (`<i class="... root-206">`), parity with i.root; SVG sized in .fabricIconSvg. */
+.root-206 {
+  user-select: text;
+  line-height: 0;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+  font-style: normal;
+  font-weight: normal;
+  display: inline-block;
+  vertical-align: middle;
+  font-family: "Fluent MDL2 Hybrid Icons", "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+  color: inherit;
+  width: 20px;
+  height: 20px;
+  box-sizing: content-box;
+}
+
+.categoryStatIcon_2943a085.root-206 {
+  color: #0ea5e9;
+  display: inline-block;
+  -webkit-font-smoothing: antialiased;
+  font-style: normal;
+  font-weight: normal;
+  font-family: "Fluent MDL2 Hybrid Icons", "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+  font-size: 20px;
+  line-height: inherit;
+  text-align: left;
+  width: 20px;
+  height: 20px;
+  box-sizing: content-box;
+  vertical-align: middle;
+}
+
+.categoryStatIcon_2943a085.root-206 .fabricIconSvg {
+  width: 20px;
+  height: 20px;
+}
+
+.root-206 .fabricIconSvg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.categoryStatCount_2943a085 {
+  display: block;
+  -webkit-font-smoothing: antialiased;
+  user-select: text;
+  line-height: inherit;
+  text-align: left;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  color: #475569;
+  font-size: var(--fontSizeBase200, 12px);
+  font-weight: var(--fontWeightSemibold, 600);
+}
+
+.rowRightSeparator_2943a085 {
+  flex-shrink: 0;
+  width: 0.5px;
+  height: 48px;
+  align-self: center;
+  background: #e2e8f0;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+.totalSection_2943a085 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+  min-width: 72px;
+}
+
+.totalLabel_2943a085 {
+  -webkit-font-smoothing: antialiased;
+  user-select: text;
+  line-height: inherit;
+  text-align: left;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  color: #94a3b8;
+  font-size: var(--fontSizeBase100, 10px);
+  font-weight: var(--fontWeightSemibold, 600);
+  letter-spacing: 0.05em;
+}
+
+.score_2943a085 {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.score_2943a085 > .root-206 {
+  color: #0ea5e9;
+  display: inline-block;
+  -webkit-font-smoothing: antialiased;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: normal;
+  font-family: "Fluent MDL2 Hybrid Icons", "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+  line-height: 0;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.score_2943a085 > .root-206 .fabricIconSvg {
+  width: 28px;
+  height: 28px;
+}
+
+.totalScore_2943a085 {
+  -webkit-font-smoothing: antialiased;
+  user-select: text;
+  line-height: inherit;
+  text-align: left;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  color: #0ea5e9;
+  font-size: 24px;
+  font-weight: var(--fontWeightBold, 700);
+}
+
+.expandButton_2943a085 {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  user-select: text;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  padding: 8px;
+  border: none;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #0ea5e9;
+  cursor: pointer;
+  font-family: inherit;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.expandButton_2943a085:hover {
+  background: #e2e8f0;
+}
+
+.expandButton_2943a085 .root-206 {
+  color: #0ea5e9;
+  cursor: pointer;
+  display: inline-block;
+  -webkit-font-smoothing: antialiased;
+  font-style: normal;
+  font-weight: normal;
+  font-family: "Fluent MDL2 Hybrid Icons", "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+  font-size: 20px;
+  line-height: 0;
+  width: 20px;
+  height: 20px;
+  box-sizing: content-box;
+  vertical-align: middle;
+}
+
+.expandButton_2943a085 .root-206 .fabricIconSvg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Expanded row: recent activity (SharePoint-style details). */
+.details_2943a085 {
+  -webkit-font-smoothing: antialiased;
+  user-select: text;
+  text-align: left;
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: inherit;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  border-radius: 0 0 9px 9px;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+/* "Recent activity" uses the same typography as column headers. */
+.detailsTitle_2943a085,
+.activityTable_2943a085 thead th {
+  margin: 0;
+  font-family: Segoe UI, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: 12px;
+  line-height: 1.3;
+  font-weight: var(--fontWeightSemibold, 600);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  -webkit-font-smoothing: antialiased;
+}
+
+.detailsTitle_2943a085 {
+  margin: 0 0 16px;
+  padding: 0;
+}
+
+.activityTableWrap_2943a085 {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.activityTable_2943a085 {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  color: #0f172a;
+}
+
+.activityTable_2943a085 thead th {
+  text-align: left;
+  padding: 0 12px 10px 0;
+  vertical-align: bottom;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+/* Points: right-aligned, inset from the card edge so values sit a bit left. */
+.activityTable_2943a085 thead th.activityTableHeadPoints_2943a085,
+.activityTable_2943a085 tbody td.activityCellPoints_2943a085 {
+  text-align: right;
+  width: 1%;
+  box-sizing: border-box;
+  padding-left: 8px;
+  padding-right: 12px;
+}
+
+.activityTable_2943a085 tbody tr {
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.activityTable_2943a085 tbody tr:hover {
+  background: rgba(241, 245, 249, 0.6);
+}
+
+.activityTable_2943a085 tbody tr:last-child {
+  border-bottom: none;
+}
+
+.activityTable_2943a085 tbody td {
+  padding: 12px 12px 12px 0;
+  vertical-align: top;
+  line-height: 1.35;
+}
+
+.activityCellTitle_2943a085 {
+  color: #0f172a;
+  min-width: 10rem;
+}
+
+.activityCellDate_2943a085 {
+  color: #64748b;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.activityCategoryPill_2943a085 {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  background: #e2e8f0;
+  color: #334155;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.activityCategoryPill_2943a085 .activityCategoryPillIcon_2943a085.categoryStatIcon_2943a085 {
+  flex-shrink: 0;
+  color: #0ea5e9;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  line-height: 0;
+}
+
+.activityCategoryPill_2943a085 .activityCategoryPillIcon_2943a085 .fabricIconSvg {
+  width: 16px;
+  height: 16px;
+}
+
+.activityCellPoints_2943a085 {
+  color: #0ea5e9;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.activityEmpty_2943a085 {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .podium_2943a085 {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .podiumColumn_2943a085 {
+    order: 0;
+  }
+}

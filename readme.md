@@ -12,7 +12,6 @@ To submit your tasks, you will need a working GitHub account:
 - Create a public repository dedicated to the challenge.
 - As you work through the tasks, create a new folder for each task: `task-1`, `task-2`, `task-3`, `task-4`.
 - Each task announcement will specify exactly what needs to go inside (solution files, deployed links, artifacts, etc.).
-
 ## 2. Schedule and Task Hints
 
 This challenge consists of 4 tasks:
