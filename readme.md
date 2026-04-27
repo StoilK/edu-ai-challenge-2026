@@ -13,6 +13,8 @@ To submit your tasks, you will need a working GitHub account:
 - As you work through the tasks, create a new folder for each task: `task-1`, `task-2`, `task-3`, `task-4`.
 - Each task announcement will specify exactly what needs to go inside (solution files, deployed links, artifacts, etc.).
 
+**This repo:** Task 1 (Leaderboard app) lives in **`task-1/leaderboard-app/`** — see `task-1/README.md`. If a stray `leaderboard-app` exists at the repo root, remove it and keep the copy under `task-1` only.
+
 ## 2. Schedule and Task Hints
 
 This challenge consists of 4 tasks:

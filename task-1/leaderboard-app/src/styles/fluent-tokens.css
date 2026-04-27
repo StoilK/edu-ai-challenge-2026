@@ -1,0 +1,361 @@
+/* Leaderboard web part: filter bar and controls. Global :root + page shell: fluent-app-shell.css */
+
+.filterBar_2943a085 .ms-Dropdown-container {
+  min-width: 0;
+  position: relative;
+}
+
+.filterBar_2943a085 .ms-Dropdown-container:has(> .ms-Dropdown[aria-expanded="true"]) {
+  z-index: 20;
+}
+
+/* Filter + search card — devtools “computed” on filter row */
+.filterBar_2943a085 {
+  color: #0f172a;
+  font-family: Segoe UI, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 1200px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 16px 20px;
+  transition: all 0.2s var(--curveEasyEase, ease);
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+  font-size: var(--fontSizeBase300, 14px);
+  line-height: var(--lineHeightBase300, 20px);
+  font-weight: var(--fontWeightRegular, 400);
+}
+
+/* Search + combobox: 14px type, 1px border, search row fixed 32px tall. */
+.filterBar_2943a085 .ms-Dropdown.dropdown-173,
+.filterBar_2943a085 .ms-Dropdown,
+.filterBar_2943a085 .ms-SearchBox.root-193,
+.filterBar_2943a085 .root-193.ms-SearchBox {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  min-height: 32px;
+  margin: 0;
+  background-color: rgb(235, 235, 237);
+  color: #201f1e;
+  border: 1px solid rgb(55, 55, 55);
+  border-radius: 2px;
+  box-shadow: none;
+  outline: 0;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  font-weight: 400;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+  line-height: 1.25;
+  user-select: text;
+}
+
+.filterBar_2943a085 .ms-SearchBox.root-193,
+.filterBar_2943a085 .root-193.ms-SearchBox {
+  height: 32px;
+  min-height: 32px;
+  max-height: 32px;
+}
+
+/* Year & quarter: 120px min; category: 150px; search fills the rest (min 120). */
+.filterBar_2943a085 .filters_2943a085 {
+  display: flex;
+  flex: 0 0 auto;
+  min-width: 0;
+  gap: 10px;
+  align-items: center;
+}
+
+.filterBar_2943a085 .filters_2943a085 > *:nth-child(1),
+.filterBar_2943a085 .filters_2943a085 > *:nth-child(2) {
+  flex: 0 0 120px;
+  width: 120px;
+  min-width: 120px;
+  max-width: 120px;
+}
+
+.filterBar_2943a085 .filterBarCategory_2943a085,
+.filterBar_2943a085 .filters_2943a085 > *:nth-child(3) {
+  flex: 0 0 150px;
+  width: 150px;
+  min-width: 150px;
+  max-width: 150px;
+}
+
+.filterBar_2943a085 .ms-Dropdown.dropdown-173,
+.filterBar_2943a085 .ms-Dropdown {
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  min-height: 32px;
+  height: 32px;
+  max-height: 32px;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Content box height = 32px – 1px top/bottom border. */
+.filterBar_2943a085 .ms-SearchBox.root-193,
+.filterBar_2943a085 .root-193.ms-SearchBox {
+  align-items: center;
+  padding: 0 0 0 0;
+}
+
+.filterBar_2943a085 .ms-DropdownHeader_2943a085 {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 0;
+  height: 30px;
+  max-height: 30px;
+  box-sizing: border-box;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0 2px 0 4px;
+  cursor: pointer;
+  color: #201f1e;
+}
+
+.filterBar_2943a085 .ms-Dropdown .ms-Dropdown-title.title-204 {
+  display: flex;
+  align-items: center;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  padding: 0 2px 0 4px;
+  font-size: 14px;
+  color: #201f1e;
+  text-align: left;
+}
+
+.filterBar_2943a085 .ms-Dropdown .fabricIconSvg {
+  display: block;
+}
+
+.filterBar_2943a085 .nativeDropdownSelect {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  background: rgb(235, 235, 237);
+  color: #201f1e;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: var(--lineHeightBase300, 20px);
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* List: 100% of parent width, flush, no border—depth from shadow (ref). */
+.filterBar_2943a085 .nativeDropdownList_2943a085 {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  top: 100%;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  margin-top: 0;
+  padding: 0;
+  list-style: none;
+  background-color: #e8e8e8;
+  color: #201f1e;
+  border: 0;
+  border-radius: 0 0 2px 2px;
+  box-sizing: border-box;
+  max-height: min(320px, 50vh);
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1), 0 1px 0 rgba(0, 0, 0, 0.04);
+}
+
+/* Open: trigger has top radii, list has bottom radii. */
+.filterBar_2943a085 .ms-Dropdown-container:has(> .ms-Dropdown[aria-expanded="true"]) > .ms-Dropdown {
+  border-radius: 2px 2px 0 0;
+}
+
+.filterBar_2943a085 .nativeDropdownOption_2943a085 {
+  margin: 0;
+  padding: 5px 8px 5px 6px;
+  font-size: 14px;
+  line-height: 1.35;
+  font-weight: 400;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+  text-align: left;
+  color: #201f1e;
+  background: #e8e8e8;
+  cursor: pointer;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  border: 0;
+  box-shadow: none;
+}
+
+/* Rest: one shared fill; hover (not on first row) is lighter. */
+.filterBar_2943a085 .nativeDropdownOption_2943a085:hover:not(:first-child) {
+  background: #fff;
+}
+
+/* Chevrons only: slightly lighter than value text. Search icon keeps #201f1e (below). */
+.filterBar_2943a085 .ms-Dropdown-caretDownWrapper,
+.filterBar_2943a085 .caretDownWrapper-175 {
+  position: relative;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  align-self: center;
+  width: 22px;
+  min-height: 0;
+  justify-content: center;
+  pointer-events: none;
+  color: #5d5a57;
+}
+
+.filterBar_2943a085 .ms-Dropdown i.root-206,
+.filterBar_2943a085 .ms-Dropdown .ms-Dropdown-caretDownWrapper i {
+  color: #5d5a57;
+  line-height: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  fill: currentColor;
+}
+
+.filterBar_2943a085 .ms-Dropdown .ms-Dropdown-caretDownWrapper .fabricIconSvg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.filterBar_2943a085 .ms-SearchBox i.ms-SearchBox-icon .fabricIconSvg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+/* Search: inner field + icon (outer chrome is shared with dropdowns above) */
+.filterBar_2943a085 .ms-SearchBox-iconContainer,
+.filterBar_2943a085 .iconContainer-194 {
+  display: flex;
+  width: 32px;
+  flex: 0 0 32px;
+  justify-content: center;
+  align-items: center;
+  color: #201f1e;
+  opacity: 1;
+  transition: opacity 0.15s ease, width 0.15s ease, flex 0.15s ease, max-width 0.15s ease, min-width 0.15s ease, padding 0.15s ease, margin 0.15s ease;
+}
+
+.filterBar_2943a085 .ms-SearchBox i.ms-SearchBox-icon,
+.filterBar_2943a085 .ms-SearchBox-iconContainer i.root-206 {
+  color: #201f1e;
+  line-height: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  fill: currentColor;
+}
+
+.filterBar_2943a085 .ms-SearchBox-field.field-197,
+.filterBar_2943a085 .ms-SearchBox-field {
+  border: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  height: 30px;
+  line-height: var(--lineHeightBase300, 20px);
+  align-self: center;
+  color: #201f1e;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 400;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  outline: 0;
+  padding: 0 4px 0 0;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.filterBar_2943a085 .ms-SearchBox-field::placeholder {
+  color: #201f1e;
+  opacity: 1;
+  transition: opacity 0.15s ease;
+}
+
+/* Focus: hide search icon + placeholder; they return on blur (and when empty + Enter, see FilterBar) */
+.filterBar_2943a085 .ms-SearchBox.root-193:focus-within .ms-SearchBox-iconContainer,
+.filterBar_2943a085 .ms-SearchBox.root-193:focus-within .iconContainer-194 {
+  opacity: 0;
+  width: 0;
+  min-width: 0;
+  max-width: 0;
+  flex: 0 0 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease, width 0.15s ease, flex 0.15s ease;
+}
+
+.filterBar_2943a085 .ms-SearchBox.root-193:focus-within .ms-SearchBox-field::placeholder,
+.filterBar_2943a085 .ms-SearchBox.root-193:focus-within .ms-SearchBox-field.field-197::placeholder {
+  opacity: 0;
+}
+
+/* Search: remaining width, at least 120px. */
+.filterBar_2943a085 .search_2943a085 {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 120px;
+  max-width: none;
+}
+
+.filterBar_2943a085 .search_2943a085 .ms-SearchBox.root-193,
+.filterBar_2943a085 .search_2943a085 .root-193.ms-SearchBox {
+  width: 100%;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+/* Hover: subtle card lift to match “transition: all .2s” in theme */
+.filterBar_2943a085:hover {
+  box-shadow: var(--shadow4, 0 1.6px 3.6px 0 rgba(0, 0, 0, 0.132), 0 0.3px 0.9px 0 rgba(0, 0, 0, 0.108));
+  border-color: #cbd5e1;
+}
+
+.filterBar_2943a085 .ms-Dropdown:focus-within,
+.filterBar_2943a085 .ms-SearchBox:focus-within {
+  border-width: 1px;
+  border-color: #0b0b0b;
+  outline: none;
+}
