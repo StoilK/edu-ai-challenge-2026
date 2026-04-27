@@ -117,7 +117,7 @@ function splitPoints(total: number, n: number, rand: () => number): number[] {
   const w = Array.from({ length: n }, () => rand() + 0.01);
   const sumW = w.reduce((a, b) => a + b, 0);
   const parts: number[] = w.map((x) => Math.max(1, Math.floor((x / sumW) * total)));
-  let s = parts.reduce((a, b) => a + b, 0);
+  const s = parts.reduce((a, b) => a + b, 0);
   let diff = total - s;
   let i = 0;
   while (diff > 0) {
