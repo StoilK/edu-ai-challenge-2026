@@ -2,6 +2,10 @@
 
 Dynamic version of the SharePoint **LeaderboardWebPart** template: top-three podium, year / quarter / category filters, search, and a scrollable list. Class names follow the static export (e.g. `leaderboard_2943a085`).
 
+## Approach
+
+The starting point was the real leaderboard in the browser: I copied the relevant HTML from DevTools and downloaded the page CSS from the Network tab, then saved those as the static reference under `task-1/reference/` (`themplate.txt`, `themplate_css.txt`). Sensitive values in the markup were swapped for mocked data using regular-expression replacements, so the repo carries no real employee or production content. The React app reimplements that layout and behavior against typed mock data (`src/data/mockData.ts`).
+
 ## 1. Component breakdown
 
 | Component | Role |
