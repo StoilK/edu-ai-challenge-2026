@@ -1,10 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { toUserMessage } from "@/lib/errors";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { LoadingState } from "@/components/common/LoadingState";
-import { useAuth } from "@/features/auth/AuthProvider";
+import { useAuth } from "@/features/auth/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/invite/$token")({
@@ -59,7 +60,7 @@ function AcceptInvitePage() {
     const { error } = await supabase.rpc("accept_host_invite", { _token: token });
     setAccepting(false);
     if (error) {
-      toast.error(error.message);
+      toast.error(toUserMessage(error));
       return;
     }
     await refreshRoles();

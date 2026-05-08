@@ -71,7 +71,9 @@ function ExplorePage() {
 
       <div className="mt-6 grid gap-3 rounded-xl border border-border bg-card p-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="sm:col-span-2 lg:col-span-1">
-          <Label htmlFor="q" className="sr-only">Search</Label>
+          <Label htmlFor="q" className="sr-only">
+            Search
+          </Label>
           <div className="relative">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
@@ -86,7 +88,9 @@ function ExplorePage() {
         <div>
           <Label className="text-xs text-muted-foreground">When</Label>
           <Select value={when} onValueChange={(v) => setWhen(v as When)}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="upcoming">Upcoming</SelectItem>
               <SelectItem value="past">Past</SelectItem>
@@ -95,11 +99,15 @@ function ExplorePage() {
           </Select>
         </div>
         <div>
-          <Label htmlFor="from" className="text-xs text-muted-foreground">From</Label>
+          <Label htmlFor="from" className="text-xs text-muted-foreground">
+            From
+          </Label>
           <Input id="from" type="date" value={from} onChange={(e) => setFrom(e.target.value)} />
         </div>
         <div>
-          <Label htmlFor="to" className="text-xs text-muted-foreground">To</Label>
+          <Label htmlFor="to" className="text-xs text-muted-foreground">
+            To
+          </Label>
           <Input id="to" type="date" value={to} onChange={(e) => setTo(e.target.value)} />
         </div>
       </div>

@@ -1,28 +1,11 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import type { Session, User } from "@supabase/supabase-js";
+import { useEffect, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import type { Database } from "@/integrations/supabase/types";
-
-type AppRole = Database["public"]["Enums"]["app_role"];
-
-interface AuthContextValue {
-  session: Session | null;
-  user: User | null;
-  roles: AppRole[];
-  loading: boolean;
-  isHost: boolean;
-  isChecker: boolean;
-  isAdmin: boolean;
-  signOut: () => Promise<void>;
-  refreshRoles: () => Promise<void>;
-}
-
-const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+import { AuthContext, type AuthContextValue } from "./auth-context";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [session, setSession] = useState<Session | null>(null);
-  const [roles, setRoles] = useState<AppRole[]>([]);
+  const [session, setSession] = useState<AuthContextValue["session"]>(null);
+  const [roles, setRoles] = useState<AuthContextValue["roles"]>([]);
   const [loading, setLoading] = useState(true);
 
   const loadRoles = async (userId: string | undefined) => {
@@ -91,10 +74,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-
-export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used inside AuthProvider");
-  return ctx;
 }

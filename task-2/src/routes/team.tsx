@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { toUserMessage } from "@/lib/errors";
 import { Copy, Plus, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -17,7 +18,7 @@ import {
 import { PageHeader } from "@/components/common/PageHeader";
 import { LoadingState } from "@/components/common/LoadingState";
 import { EmptyState } from "@/components/common/EmptyState";
-import { useAuth } from "@/features/auth/AuthProvider";
+import { useAuth } from "@/features/auth/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/team")({
@@ -57,17 +58,17 @@ function TeamPage() {
     (async () => {
       const { data: prof } = await supabase
         .from("profiles")
-        .select("display_name, email")
+        .select("display_name")
         .eq("id", user.id)
         .maybeSingle();
-      const name = prof?.display_name ?? prof?.email ?? "My events";
+      const name = prof?.display_name ?? "My events";
       const { data, error } = await supabase
         .from("hosts")
         .insert({ name, owner_id: user.id })
         .select("id")
         .single();
       if (error) {
-        toast.error(error.message);
+        toast.error(toUserMessage(error));
         return;
       }
       setHostId(data.id);
@@ -89,12 +90,12 @@ function TeamPage() {
       if (ids.length) {
         const { data: profs } = await supabase
           .from("profiles")
-          .select("id, display_name, email")
+          .select("id, display_name")
           .in("id", ids);
         (profs ?? []).forEach((p) =>
           profMap.set(p.id, {
-            name: p.display_name ?? p.email ?? "Member",
-            email: p.email,
+            name: p.display_name ?? "Member",
+            email: null,
           }),
         );
       }
@@ -134,11 +135,13 @@ function TeamPage() {
       toast.success("Invite created");
       qc.invalidateQueries({ queryKey: ["host-invites"] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(toUserMessage(e)),
   });
 
   const inviteUrl = (token: string) =>
-    typeof window !== "undefined" ? `${window.location.origin}/invite/${token}` : `/invite/${token}`;
+    typeof window !== "undefined"
+      ? `${window.location.origin}/invite/${token}`
+      : `/invite/${token}`;
 
   const copy = async (text: string) => {
     try {
@@ -171,7 +174,10 @@ function TeamPage() {
 
   return (
     <div className="container mx-auto max-w-3xl px-4 py-10">
-      <PageHeader title="Team" description="Invite members as Host or Checker via a copyable link." />
+      <PageHeader
+        title="Team"
+        description="Invite members as Host or Checker via a copyable link."
+      />
 
       <div className="mt-6 rounded-xl border border-border bg-card p-5">
         <h2 className="text-base font-semibold">Create invite link</h2>
@@ -179,7 +185,9 @@ function TeamPage() {
           <div className="min-w-[160px]">
             <Label className="text-xs text-muted-foreground">Role</Label>
             <Select value={newRole} onValueChange={(v) => setNewRole(v as Role)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
                 <SelectItem value="checker">Checker</SelectItem>
                 <SelectItem value="manager">Host (manager)</SelectItem>
@@ -190,13 +198,16 @@ function TeamPage() {
             <Plus className="h-4 w-4" /> {create.isPending ? "Creating…" : "Create link"}
           </Button>
         </div>
-        <p className="mt-2 text-xs text-muted-foreground">Links expire in 14 days. Each link can only be used once.</p>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Links expire in 14 days. Each link can only be used once.
+        </p>
       </div>
 
       <section className="mt-8">
         <h2 className="text-lg font-semibold">Active invites</h2>
         <div className="mt-3 space-y-3">
-          {(invites ?? []).filter((i) => !i.used_at && new Date(i.expires_at) > new Date()).length === 0 ? (
+          {(invites ?? []).filter((i) => !i.used_at && new Date(i.expires_at) > new Date())
+            .length === 0 ? (
             <p className="text-sm text-muted-foreground">No active invites.</p>
           ) : (
             (invites ?? [])
@@ -239,11 +250,11 @@ function TeamPage() {
                 >
                   <div className="min-w-0">
                     <p className="font-medium">{m.name}</p>
-                    {m.email && (
-                      <p className="truncate text-xs text-muted-foreground">{m.email}</p>
-                    )}
+                    {m.email && <p className="truncate text-xs text-muted-foreground">{m.email}</p>}
                   </div>
-                  <Badge variant="outline" className="capitalize">{m.role}</Badge>
+                  <Badge variant="outline" className="capitalize">
+                    {m.role}
+                  </Badge>
                 </li>
               ))}
             </ul>

@@ -20,16 +20,17 @@ This README walks you through the four core flows end-to-end:
 
 **Goal:** Get a published event live so people can find and RSVP to it.
 
-1. Go to **/host** from the top nav.
-2. Click **Become a host**. This self-assigns you the `host` role (one click, no approval needed).
-3. Fill out your host profile: display name, logo/avatar URL, short bio, contact email. This is what attendees see on your public host page (`/hosts/:id`).
-4. Click **New event** (or go to **/events/new**) and fill in:
+1. Go to **/host** from the top nav and click **Become a host** (one click, no approval).
+2. Fill out your host profile: display name, logo/avatar URL, short bio, contact email. This is what attendees see on `/hosts/:id`.
+3. Click **New event** (or go to **/events/new**) and fill in:
    - **Title, description, location**
    - **Starts at / Ends at** — local time, stored in UTC
+   - **Cover image URL** (optional)
    - **Capacity** — leave blank for unlimited
    - **Visibility** — `public` (appears in Explore) or `unlisted` (only reachable via direct link)
-5. Click **Save**. The event is created as a **draft** — not visible to anyone but you.
-6. Open the event from **/dashboard** and click **Publish**.
+4. Click **Save**. The event is created as a **draft** — not visible to anyone but you.
+5. Open the event from **/dashboard** and click **Publish**.
+6. Need to change something? Click **Edit** on the event card (in `/dashboard` or `/my/events`) to open `/events/:id/edit` and update any field, including the cover image.
 7. Share the event URL (`/events/:id`). Public events also appear automatically in **/explore**.
 
 > Tip: From the dashboard you can **Duplicate** any event to reuse it as a draft template, or **Unpublish** to hide it again.
@@ -47,7 +48,7 @@ This README walks you through the four core flows end-to-end:
    - **Event full** → status `waitlisted`. You hold a FIFO position based on RSVP time.
 4. To cancel, click **Cancel RSVP** on the event page. If you were `confirmed`, the oldest waitlisted person is **auto-promoted** and instantly receives a ticket.
 
-> You never need to refresh capacity manually — capacity, waitlist order, and promotion are handled by database triggers, so the rules hold even under concurrent RSVPs.
+> Capacity, waitlist order, and promotion are handled by database triggers, so the rules hold even under concurrent RSVPs.
 
 ---
 
@@ -56,11 +57,7 @@ This README walks you through the four core flows end-to-end:
 **Goal:** Have a scannable QR code ready to show at the door.
 
 1. As soon as your RSVP is `confirmed`, a ticket is created for you.
-2. Go to **/my/tickets**. Each ticket card shows:
-   - Event title, time, venue, host
-   - A **QR code** (this is what gets scanned at check-in)
-   - The short ticket code
-   - **Add to calendar** — downloads an `.ics` file you can import into Google Calendar, Apple Calendar, Outlook, etc.
+2. Go to **/my/tickets**. Each ticket card shows the event details, a **QR code**, the short ticket code, and an **Add to calendar** (`.ics`) action.
 3. At the venue, open this page on your phone and show the QR code to a checker.
 
 > Waitlisted? No ticket yet — it appears here automatically the moment you're promoted.
@@ -71,13 +68,13 @@ This README walks you through the four core flows end-to-end:
 
 **Goal:** Validate tickets at the door, fast and idempotently.
 
-1. The host can check in directly. To delegate, the host promotes a trusted user to the `checker` role from the team page.
+1. The host can check in directly. To delegate, the host invites a trusted user as a `checker` from **/team**.
 2. Go to **/check-in**.
 3. Scan the attendee's QR code (or paste the token).
 4. The page tells you immediately:
-   - ✅ **Checked in** — name + event + timestamp recorded
-   - ⚠️ **Already checked in** — shows the previous check-in time (no double-counting)
-   - ❌ **Invalid token** — ticket doesn't exist or isn't for an event you can check in for
+   - **Checked in** — name + event + timestamp recorded
+   - **Already checked in** — shows the previous check-in time (no double-counting)
+   - **Invalid token** — ticket doesn't exist or isn't for an event you can check in for
 5. Live counters at the top show **total tickets** and **checked-in count**.
 6. Made a mistake? Click **Undo** on the most recent check-in to revert it.
 
@@ -85,7 +82,7 @@ This README walks you through the four core flows end-to-end:
 
 ## Bonus: After the event (Host)
 
-From **/dashboard**, on each event you can:
+From **/dashboard**, on each event you can export:
 
 - **RSVPs CSV** — name, email, RSVP status, RSVP timestamp
 - **Attendance CSV** — name, email, RSVP status, check-in time
@@ -96,18 +93,21 @@ Both exports are RFC 4180-quoted with a UTF-8 BOM, so they open cleanly in Excel
 
 ## Roles at a glance
 
-| Role | What they can do |
-|---|---|
-| **Attendee** | Browse events, RSVP, view their own tickets |
-| **Host** | All of the above + create/publish/edit their own events, see RSVPs, export CSVs, check guests in |
-| **Checker** | Check guests in for events they've been authorized for |
+| Role         | What they can do                                                                                 |
+| ------------ | ------------------------------------------------------------------------------------------------ |
+| **Attendee** | Browse events, RSVP, view their own tickets                                                      |
+| **Host**     | All of the above + create/publish/edit their own events, see RSVPs, export CSVs, check guests in |
+| **Checker**  | Check guests in for events they've been authorized for                                           |
 
 Roles live in a dedicated `user_roles` table and are enforced at the database layer — the UI cannot bypass them.
 
 ---
 
-## Notes on check-in
+## Image uploads
 
-- Checkers only see events they've been explicitly invited to (via the host's team page). If a checker sees "No events assigned to you yet", the host hasn't sent them an invite — or the event predates the org link and needs to be re-saved.
-- When a checker is authorized for multiple events, the check-in page shows a switcher; selecting an event updates the live ticket and check-in counters to that event.
+The managed Storage service is unavailable on this backend (see <https://status.supabase.com/>), so we don't upload to a bucket. Instead, the cover image / host avatar fields accept either:
 
+- **A file upload** — picked from your device. The client resizes it (max 1600px, JPEG ~82% quality) and stores it inline as a base64 data URL on the row.
+- **A direct image URL** — from any host that allows hotlinking. Hotlink-protected hosts (e.g. `wikia.nocookie.net`) won't render.
+
+Events without a cover image display a neutral "No image" placeholder.

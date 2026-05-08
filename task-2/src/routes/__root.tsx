@@ -44,7 +44,9 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
           This page didn't load
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Something went wrong. Please try again or go back home.
+        </p>
         <div className="mt-6 flex justify-center gap-2">
           <button
             onClick={() => {
@@ -84,6 +86,33 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content: "Discover and host free community events.",
       },
       { property: "og:type", content: "website" },
+      { name: "twitter:title", content: "Gather — Free Community Events" },
+      {
+        name: "description",
+        content:
+          "Community Connect is a full-stack web application for hosting and managing free community events.",
+      },
+      {
+        property: "og:description",
+        content:
+          "Community Connect is a full-stack web application for hosting and managing free community events.",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Community Connect is a full-stack web application for hosting and managing free community events.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6f94184d-2f98-4398-b1a6-315d99021e8a/id-preview-3b654e85--379b83f7-86f1-4788-bb98-ec6f6d5f42b2.lovable.app-1778158054829.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6f94184d-2f98-4398-b1a6-315d99021e8a/id-preview-3b654e85--379b83f7-86f1-4788-bb98-ec6f6d5f42b2.lovable.app-1778158054829.png",
+      },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
   }),

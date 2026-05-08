@@ -4,6 +4,7 @@ import { toCSV } from "@/lib/csv";
 
 export type EventRow = Database["public"]["Tables"]["events"]["Row"];
 export type EventInsert = Database["public"]["Tables"]["events"]["Insert"];
+export type EventUpdate = Database["public"]["Tables"]["events"]["Update"];
 
 export async function listPublicEvents(): Promise<EventRow[]> {
   const { data, error } = await supabase
@@ -34,6 +35,17 @@ export async function listMyHostedEvents(userId: string): Promise<EventRow[]> {
 
 export async function createEvent(input: EventInsert): Promise<EventRow> {
   const { data, error } = await supabase.from("events").insert(input).select().single();
+  if (error) throw error;
+  return data;
+}
+
+export async function updateEvent(eventId: string, input: EventUpdate): Promise<EventRow> {
+  const { data, error } = await supabase
+    .from("events")
+    .update(input)
+    .eq("id", eventId)
+    .select()
+    .single();
   if (error) throw error;
   return data;
 }
@@ -88,14 +100,17 @@ export async function getEventStats(eventId: string) {
   };
 }
 
-async function fetchProfiles(userIds: string[]) {
-  if (userIds.length === 0) return new Map<string, { display_name: string | null; email: string | null }>();
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("id, display_name, email")
-    .in("id", userIds);
+async function fetchProfilesWithEmails(eventId: string) {
+  const { data, error } = await supabase.rpc("get_event_attendee_emails", { p_event_id: eventId });
   if (error) throw error;
-  return new Map((data ?? []).map((p) => [p.id, { display_name: p.display_name, email: p.email }]));
+  return new Map(
+    (data ?? []).map(
+      (p: { user_id: string; email: string | null; display_name: string | null }) => [
+        p.user_id,
+        { display_name: p.display_name, email: p.email },
+      ],
+    ),
+  );
 }
 
 export async function exportRsvpsCSV(eventId: string): Promise<string> {
@@ -106,7 +121,7 @@ export async function exportRsvpsCSV(eventId: string): Promise<string> {
     .order("created_at", { ascending: true });
   if (error) throw error;
   const rsvps = data ?? [];
-  const profiles = await fetchProfiles(rsvps.map((r) => r.user_id));
+  const profiles = await fetchProfilesWithEmails(eventId);
   const rows = rsvps.map((r) => {
     const p = profiles.get(r.user_id);
     return [p?.display_name ?? "", p?.email ?? "", r.status, new Date(r.created_at).toISOString()];
@@ -125,7 +140,7 @@ export async function exportAttendanceCSV(eventId: string): Promise<string> {
     checked_in_at: string | null;
     rsvp: { status: string } | null;
   }>;
-  const profiles = await fetchProfiles(tickets.map((t) => t.user_id));
+  const profiles = await fetchProfilesWithEmails(eventId);
   const rows = tickets.map((t) => {
     const p = profiles.get(t.user_id);
     return [
@@ -137,4 +152,3 @@ export async function exportAttendanceCSV(eventId: string): Promise<string> {
   });
   return toCSV(["Name", "Email", "RSVP status", "Check-in time"], rows);
 }
-

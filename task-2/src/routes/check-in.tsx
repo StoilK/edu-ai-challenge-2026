@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
+import { toUserMessage } from "@/lib/errors";
 import { CheckCircle2, RotateCcw, Calendar, MapPin, User, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/common/PageHeader";
 import { LoadingState } from "@/components/common/LoadingState";
-import { useAuth } from "@/features/auth/AuthProvider";
+import { useAuth } from "@/features/auth/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/check-in")({
@@ -53,7 +54,6 @@ function CheckInPage() {
         .eq("user_id", user!.id);
       if (mErr) throw mErr;
       const hostIds = (memberships ?? []).map((m) => m.host_id);
-
 
       const filters: string[] = [];
       if (hostIds.length) filters.push(`host_org_id.in.(${hostIds.join(",")})`);
@@ -113,15 +113,11 @@ function CheckInPage() {
         ticket.event?.host_id
           ? supabase
               .from("profiles")
-              .select("display_name, email")
+              .select("display_name")
               .eq("id", ticket.event.host_id)
               .maybeSingle()
           : Promise.resolve({ data: null, error: null } as const),
-        supabase
-          .from("profiles")
-          .select("display_name, email")
-          .eq("id", ticket.user_id)
-          .maybeSingle(),
+        supabase.from("profiles").select("display_name").eq("id", ticket.user_id).maybeSingle(),
       ]);
 
       return {
@@ -132,16 +128,14 @@ function CheckInPage() {
         starts_at: ticket.event?.starts_at ?? null,
         ends_at: ticket.event?.ends_at ?? null,
         location: ticket.event?.location ?? null,
-        host_name:
-          hostRes.data?.display_name ?? hostRes.data?.email ?? "Unknown host",
-        attendee_name:
-          attendeeRes.data?.display_name ?? attendeeRes.data?.email ?? "Attendee",
-        attendee_email: attendeeRes.data?.email ?? "",
+        host_name: hostRes.data?.display_name ?? "Unknown host",
+        attendee_name: attendeeRes.data?.display_name ?? "Attendee",
+        attendee_email: "",
         already_at: ticket.checked_in_at,
       };
     },
     onSuccess: (t) => setPending(t),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(toUserMessage(e)),
   });
 
   const checkIn = useMutation({
@@ -173,7 +167,7 @@ function CheckInPage() {
       qc.invalidateQueries({ queryKey: ["checkin-counts"] });
       qc.invalidateQueries({ queryKey: ["event-stats", info.event_id] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(toUserMessage(e)),
   });
 
   const undo = useMutation({
@@ -192,7 +186,7 @@ function CheckInPage() {
       qc.invalidateQueries({ queryKey: ["checkin-counts"] });
       if (undone) qc.invalidateQueries({ queryKey: ["event-stats", undone.event_id] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(toUserMessage(e)),
   });
 
   if (loading) return <LoadingState />;
@@ -221,7 +215,10 @@ function CheckInPage() {
 
   return (
     <div className="container mx-auto max-w-md px-4 py-10">
-      <PageHeader title="Check-in" description="Scan or paste a ticket code, then confirm the event before check-in." />
+      <PageHeader
+        title="Check-in"
+        description="Scan or paste a ticket code, then confirm the event before check-in."
+      />
 
       <div className="mt-6">
         <h2 className="text-sm font-semibold">Events you can check in</h2>

@@ -79,7 +79,9 @@ function HostProfilePage() {
     <div className="container mx-auto max-w-5xl px-4 py-10">
       <div className="flex flex-col gap-6 border-b border-border pb-8 sm:flex-row sm:items-start">
         <Avatar className="h-24 w-24 ring-2 ring-border">
-          {profile.avatar_url && <AvatarImage src={profile.avatar_url} alt={profile.display_name ?? "Host"} />}
+          {profile.avatar_url && (
+            <AvatarImage src={profile.avatar_url} alt={profile.display_name ?? "Host"} />
+          )}
           <AvatarFallback className="text-xl">{initials}</AvatarFallback>
         </Avatar>
         <div className="flex-1">
@@ -91,9 +93,7 @@ function HostProfilePage() {
               {profile.bio}
             </p>
           ) : (
-            <p className="mt-2 text-sm text-muted-foreground italic">
-              No bio yet.
-            </p>
+            <p className="mt-2 text-sm text-muted-foreground italic">No bio yet.</p>
           )}
           {contact && (
             <a
@@ -117,4 +117,3 @@ function HostProfilePage() {
     </div>
   );
 }
-

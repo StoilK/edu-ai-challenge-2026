@@ -88,3 +88,28 @@ export function localInputToISO(localValue: string, tz: string): string {
   const offset = tzAsUTC - asUTC; // ms that tz is ahead of UTC for that wall time
   return new Date(asUTC - offset).toISOString();
 }
+
+/** Convert an ISO UTC instant into a `datetime-local`-shaped string (YYYY-MM-DDTHH:MM) in `tz`. */
+export function isoToLocalInput(iso: string, tz: string): string {
+  if (!iso) return "";
+  try {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: tz,
+      hour12: false,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    })
+      .formatToParts(new Date(iso))
+      .reduce<Record<string, string>>((acc, p) => {
+        if (p.type !== "literal") acc[p.type] = p.value;
+        return acc;
+      }, {});
+    const hh = (Number(parts.hour) % 24).toString().padStart(2, "0");
+    return `${parts.year}-${parts.month}-${parts.day}T${hh}:${parts.minute}`;
+  } catch {
+    return "";
+  }
+}

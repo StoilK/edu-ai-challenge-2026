@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Calendar, Eye, EyeOff, Copy, ExternalLink, Download } from "lucide-react";
+import { Plus, Calendar, Eye, EyeOff, Copy, ExternalLink, Download, Pencil } from "lucide-react";
 import { toast } from "sonner";
+import { toUserMessage } from "@/lib/errors";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/common/PageHeader";
@@ -16,7 +17,7 @@ import {
   exportAttendanceCSV,
   type EventRow,
 } from "@/features/events/eventsService";
-import { useAuth } from "@/features/auth/AuthProvider";
+import { useAuth } from "@/features/auth/useAuth";
 import { downloadCSV } from "@/lib/csv";
 
 export const Route = createFileRoute("/dashboard")({
@@ -103,7 +104,7 @@ function DashboardEventRow({ event, userId }: { event: EventRow; userId: string 
       toast.success(event.status === "published" ? "Unpublished" : "Published");
       qc.invalidateQueries({ queryKey: ["hosted-events"] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(toUserMessage(e)),
   });
 
   const dup = useMutation({
@@ -112,7 +113,7 @@ function DashboardEventRow({ event, userId }: { event: EventRow; userId: string 
       toast.success("Event duplicated as draft");
       qc.invalidateQueries({ queryKey: ["hosted-events"] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(toUserMessage(e)),
   });
 
   return (
@@ -138,6 +139,11 @@ function DashboardEventRow({ event, userId }: { event: EventRow; userId: string 
           <Button asChild variant="outline" size="sm">
             <Link to="/events/$eventId" params={{ eventId: event.id }}>
               <ExternalLink className="h-4 w-4" /> View
+            </Link>
+          </Button>
+          <Button asChild variant="outline" size="sm">
+            <Link to="/events/$eventId/edit" params={{ eventId: event.id }}>
+              <Pencil className="h-4 w-4" /> Edit
             </Link>
           </Button>
           <Button
@@ -167,7 +173,7 @@ function DashboardEventRow({ event, userId }: { event: EventRow; userId: string 
                 const csv = await exportRsvpsCSV(event.id);
                 downloadCSV(`${event.title}-rsvps.csv`, csv);
               } catch (e) {
-                toast.error((e as Error).message);
+                toast.error(toUserMessage(e));
               }
             }}
           >
@@ -181,7 +187,7 @@ function DashboardEventRow({ event, userId }: { event: EventRow; userId: string 
                 const csv = await exportAttendanceCSV(event.id);
                 downloadCSV(`${event.title}-attendance.csv`, csv);
               } catch (e) {
-                toast.error((e as Error).message);
+                toast.error(toUserMessage(e));
               }
             }}
           >
@@ -203,9 +209,7 @@ function Stat({ label, value, loading }: { label: string; value?: number; loadin
   return (
     <div className="rounded-lg border border-border bg-background p-3">
       <p className="text-xs text-muted-foreground">{label}</p>
-      <p className="mt-1 text-2xl font-semibold tabular-nums">
-        {loading ? "—" : (value ?? 0)}
-      </p>
+      <p className="mt-1 text-2xl font-semibold tabular-nums">{loading ? "—" : (value ?? 0)}</p>
     </div>
   );
 }

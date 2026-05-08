@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { Calendar, MapPin, Search } from "lucide-react";
+import { Calendar, MapPin, Search, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -16,7 +16,7 @@ import {
 import { PageHeader } from "@/components/common/PageHeader";
 import { EmptyState } from "@/components/common/EmptyState";
 import { LoadingState } from "@/components/common/LoadingState";
-import { useAuth } from "@/features/auth/AuthProvider";
+import { useAuth } from "@/features/auth/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/my/events")({
@@ -89,7 +89,9 @@ function MyEventsPage() {
       // 3) Events I've RSVP'd to
       const { data: rsvps, error: e4 } = await supabase
         .from("rsvps")
-        .select("status, event:events(id, title, starts_at, ends_at, location, cover_image_url, host_id, host_org_id)")
+        .select(
+          "status, event:events(id, title, starts_at, ends_at, location, cover_image_url, host_id, host_org_id)",
+        )
         .eq("user_id", user!.id);
       if (e4) throw e4;
       for (const r of rsvps ?? []) {
@@ -126,9 +128,14 @@ function MyEventsPage() {
       if (when === "past" && end >= now) return false;
       if (fromTs !== null && start < fromTs) return false;
       if (toTs !== null && start > toTs) return false;
-      if (role === "hosting" && !["owner", "manager", "checker"].some((r) => it.roles.has(r as never))) return false;
+      if (
+        role === "hosting" &&
+        !["owner", "manager", "checker"].some((r) => it.roles.has(r as never))
+      )
+        return false;
       if (role === "attending" && !it.roles.has("attendee")) return false;
-      if (ql && !`${it.event.title} ${it.event.location ?? ""}`.toLowerCase().includes(ql)) return false;
+      if (ql && !`${it.event.title} ${it.event.location ?? ""}`.toLowerCase().includes(ql))
+        return false;
       return true;
     });
   }, [data, q, role, when, from, to]);
@@ -150,16 +157,26 @@ function MyEventsPage() {
 
       <div className="mt-6 grid gap-3 rounded-xl border border-border bg-card p-4 sm:grid-cols-2 lg:grid-cols-5">
         <div className="sm:col-span-2 lg:col-span-2">
-          <Label htmlFor="q" className="sr-only">Search</Label>
+          <Label htmlFor="q" className="sr-only">
+            Search
+          </Label>
           <div className="relative">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input id="q" placeholder="Search…" value={q} onChange={(e) => setQ(e.target.value)} className="pl-9" />
+            <Input
+              id="q"
+              placeholder="Search…"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              className="pl-9"
+            />
           </div>
         </div>
         <div>
           <Label className="text-xs text-muted-foreground">Role</Label>
           <Select value={role} onValueChange={(v) => setRole(v as RoleFilter)}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All</SelectItem>
               <SelectItem value="hosting">Hosting</SelectItem>
@@ -170,7 +187,9 @@ function MyEventsPage() {
         <div>
           <Label className="text-xs text-muted-foreground">When</Label>
           <Select value={when} onValueChange={(v) => setWhen(v as WhenFilter)}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All</SelectItem>
               <SelectItem value="upcoming">Upcoming</SelectItem>
@@ -180,11 +199,15 @@ function MyEventsPage() {
         </div>
         <div className="grid grid-cols-2 gap-2 lg:col-span-5 lg:grid-cols-2">
           <div>
-            <Label htmlFor="from" className="text-xs text-muted-foreground">From</Label>
+            <Label htmlFor="from" className="text-xs text-muted-foreground">
+              From
+            </Label>
             <Input id="from" type="date" value={from} onChange={(e) => setFrom(e.target.value)} />
           </div>
           <div>
-            <Label htmlFor="to" className="text-xs text-muted-foreground">To</Label>
+            <Label htmlFor="to" className="text-xs text-muted-foreground">
+              To
+            </Label>
             <Input id="to" type="date" value={to} onChange={(e) => setTo(e.target.value)} />
           </div>
         </div>
@@ -209,58 +232,77 @@ function MyEventsPage() {
             {filtered.map((it) => {
               const ev = it.event;
               const ended = new Date(ev.ends_at) < new Date();
+              const canEdit = ev.host_id === user.id;
               return (
-                <Link
+                <div
                   key={ev.id}
-                  to="/events/$eventId"
-                  params={{ eventId: ev.id }}
-                  className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card shadow-[var(--shadow-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]"
+                  className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card shadow-[var(--shadow-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]"
                 >
-                  {ev.cover_image_url ? (
-                    <div
-                      className="aspect-[16/9] w-full bg-muted"
-                      style={{ backgroundImage: `url(${ev.cover_image_url})`, backgroundSize: "cover", backgroundPosition: "center" }}
-                    />
-                  ) : (
-                    <div className="flex aspect-[16/9] w-full items-center justify-center bg-muted text-xs uppercase tracking-wide text-muted-foreground">
-                      No image
-                    </div>
-                  )}
-                  <div className="flex flex-1 flex-col gap-3 p-4">
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      {ended && <Badge variant="secondary">Ended</Badge>}
-                      {it.roles.has("owner") && <Badge>Host</Badge>}
-                      {it.roles.has("manager") && <Badge variant="outline">Manager</Badge>}
-                      {it.roles.has("checker") && <Badge variant="outline">Checker</Badge>}
-                      {it.roles.has("attendee") && (
-                        <Badge variant="outline">
-                          {it.rsvpStatus === "waitlisted" || it.rsvpStatus === "waitlist"
-                            ? "Waitlist"
-                            : it.rsvpStatus === "cancelled"
-                              ? "Cancelled"
-                              : "Going"}
-                        </Badge>
-                      )}
-                    </div>
-                    <h3 className="line-clamp-2 text-lg font-semibold leading-snug group-hover:text-primary">
-                      {ev.title}
-                    </h3>
-                    <div className="mt-auto space-y-1.5 text-sm text-muted-foreground">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-3.5 w-3.5" />
-                        {new Date(ev.starts_at).toLocaleString(undefined, {
-                          dateStyle: "medium",
-                          timeStyle: "short",
-                        })}
+                  <Link
+                    to="/events/$eventId"
+                    params={{ eventId: ev.id }}
+                    className="flex flex-1 flex-col"
+                  >
+                    {ev.cover_image_url ? (
+                      <div
+                        className="aspect-[16/9] w-full bg-muted"
+                        style={{
+                          backgroundImage: `url(${ev.cover_image_url})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        }}
+                      />
+                    ) : (
+                      <div className="flex aspect-[16/9] w-full items-center justify-center bg-muted text-xs uppercase tracking-wide text-muted-foreground">
+                        No image
                       </div>
-                      {ev.location && (
+                    )}
+                    <div className="flex flex-1 flex-col gap-3 p-4">
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {ended && <Badge variant="secondary">Ended</Badge>}
+                        {it.roles.has("owner") && <Badge>Host</Badge>}
+                        {it.roles.has("manager") && <Badge variant="outline">Manager</Badge>}
+                        {it.roles.has("checker") && <Badge variant="outline">Checker</Badge>}
+                        {it.roles.has("attendee") && (
+                          <Badge variant="outline">
+                            {it.rsvpStatus === "waitlisted" || it.rsvpStatus === "waitlist"
+                              ? "Waitlist"
+                              : it.rsvpStatus === "cancelled"
+                                ? "Cancelled"
+                                : "Going"}
+                          </Badge>
+                        )}
+                      </div>
+                      <h3 className="line-clamp-2 text-lg font-semibold leading-snug group-hover:text-primary">
+                        {ev.title}
+                      </h3>
+                      <div className="mt-auto space-y-1.5 text-sm text-muted-foreground">
                         <div className="flex items-center gap-2">
-                          <MapPin className="h-3.5 w-3.5" /> {ev.location}
+                          <Calendar className="h-3.5 w-3.5" />
+                          {new Date(ev.starts_at).toLocaleString(undefined, {
+                            dateStyle: "medium",
+                            timeStyle: "short",
+                          })}
                         </div>
-                      )}
+                        {ev.location && (
+                          <div className="flex items-center gap-2">
+                            <MapPin className="h-3.5 w-3.5" /> {ev.location}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </Link>
+                  </Link>
+                  {canEdit && (
+                    <Link
+                      to="/events/$eventId/edit"
+                      params={{ eventId: ev.id }}
+                      aria-label="Edit event"
+                      className="absolute right-2 top-2 z-10 inline-flex items-center gap-1 rounded-md border border-border bg-background/90 px-2 py-1 text-xs font-medium shadow-sm backdrop-blur transition-colors hover:bg-accent"
+                    >
+                      <Pencil className="h-3.5 w-3.5" /> Edit
+                    </Link>
+                  )}
+                </div>
               );
             })}
           </div>

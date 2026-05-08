@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { toUserMessage } from "@/lib/errors";
 import { Star, Upload, Check, X, Flag, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/features/auth/AuthProvider";
-
-const BUCKET = "event-photos";
+import { useAuth } from "@/features/auth/useAuth";
+import { fileToDataUrl } from "@/lib/image";
 
 export function PostEventPanel({
   eventId,
@@ -47,10 +47,12 @@ export function PostEventPanel({
     mutationFn: async () => {
       if (!user) throw new Error("Sign in required");
       if (rating < 1) throw new Error("Pick a rating");
-      const { error } = await supabase.from("event_feedback").upsert(
-        { event_id: eventId, user_id: user.id, rating, comment: comment || null },
-        { onConflict: "event_id,user_id" },
-      );
+      const { error } = await supabase
+        .from("event_feedback")
+        .upsert(
+          { event_id: eventId, user_id: user.id, rating, comment: comment || null },
+          { onConflict: "event_id,user_id" },
+        );
       if (error) throw error;
     },
     onSuccess: () => {
@@ -59,7 +61,7 @@ export function PostEventPanel({
       setComment("");
       qc.invalidateQueries({ queryKey: ["feedback", eventId] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(toUserMessage(e)),
   });
 
   // ----- Photos -----
@@ -79,31 +81,26 @@ export function PostEventPanel({
   const upload = useMutation({
     mutationFn: async (file: File) => {
       if (!user) throw new Error("Sign in required");
-      const path = `${user.id}/${eventId}/${crypto.randomUUID()}-${file.name}`;
-      const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, file);
-      if (upErr) throw upErr;
+      const dataUrl = await fileToDataUrl(file);
       const { error } = await supabase
         .from("event_photos")
-        .insert({ event_id: eventId, user_id: user.id, storage_path: path });
+        .insert({ event_id: eventId, user_id: user.id, storage_path: dataUrl });
       if (error) throw error;
     },
     onSuccess: () => {
       toast.success("Uploaded — pending host approval.");
       qc.invalidateQueries({ queryKey: ["photos", eventId] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(toUserMessage(e)),
   });
 
   const moderate = useMutation({
     mutationFn: async ({ id, approved }: { id: string; approved: boolean }) => {
-      const { error } = await supabase
-        .from("event_photos")
-        .update({ approved })
-        .eq("id", id);
+      const { error } = await supabase.from("event_photos").update({ approved }).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["photos", eventId] }),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(toUserMessage(e)),
   });
 
   const removePhoto = useMutation({
@@ -112,7 +109,7 @@ export function PostEventPanel({
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["photos", eventId] }),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(toUserMessage(e)),
   });
 
   const report = useMutation({
@@ -135,11 +132,11 @@ export function PostEventPanel({
       if (error) throw error;
     },
     onSuccess: () => toast.success("Report submitted."),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(toUserMessage(e)),
   });
 
   const publicUrl = (path: string) =>
-    supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+    path.startsWith("data:") || path.startsWith("http") ? path : path;
 
   const visiblePhotos = (photos ?? []).filter(
     (p) => p.approved || isHost || p.user_id === user?.id,
@@ -287,9 +284,7 @@ export function PostEventPanel({
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={() =>
-                          report.mutate({ target_type: "photo", target_id: p.id })
-                        }
+                        onClick={() => report.mutate({ target_type: "photo", target_id: p.id })}
                       >
                         <Flag className="h-4 w-4" />
                       </Button>

@@ -2,12 +2,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Calendar, MapPin, Users, CalendarPlus } from "lucide-react";
 import { toast } from "sonner";
+import { toUserMessage } from "@/lib/errors";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LoadingState } from "@/components/common/LoadingState";
 import { getEvent } from "@/features/events/eventsService";
-import { useAuth } from "@/features/auth/AuthProvider";
+import { useAuth } from "@/features/auth/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { buildICS, downloadICS } from "@/lib/ics";
 import { formatInTimeZone } from "@/lib/datetime";
@@ -113,7 +114,7 @@ function EventDetailsPage() {
       }
       invalidate();
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(toUserMessage(e)),
   });
 
   const cancel = useMutation({
@@ -126,7 +127,7 @@ function EventDetailsPage() {
       toast.success("RSVP cancelled.");
       invalidate();
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(toUserMessage(e)),
   });
 
   if (isLoading) return <LoadingState />;
@@ -163,7 +164,11 @@ function EventDetailsPage() {
       {event.cover_image_url ? (
         <div
           className="aspect-[16/7] w-full overflow-hidden rounded-2xl bg-muted"
-          style={{ backgroundImage: `url(${event.cover_image_url})`, backgroundSize: "cover", backgroundPosition: "center" }}
+          style={{
+            backgroundImage: `url(${event.cover_image_url})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
         />
       ) : (
         <div className="flex aspect-[16/7] w-full items-center justify-center rounded-2xl border border-dashed border-border bg-muted text-sm uppercase tracking-wide text-muted-foreground">
@@ -174,15 +179,24 @@ function EventDetailsPage() {
         {ended ? <Badge variant="secondary">Ended</Badge> : <Badge>Upcoming</Badge>}
         {event.visibility === "unlisted" && <Badge variant="outline">Unlisted</Badge>}
         {event.status === "draft" && <Badge variant="outline">Draft</Badge>}
-        {!ended && isFull && <Badge variant="outline" className="border-warning text-warning-foreground bg-warning/10">Sold out — waitlist open</Badge>}
+        {!ended && isFull && (
+          <Badge variant="outline" className="border-warning text-warning-foreground bg-warning/10">
+            Sold out — waitlist open
+          </Badge>
+        )}
       </div>
-      <h1 className="mt-3 text-4xl font-semibold tracking-tight">{event.title}</h1>
+      <div className="mt-3">
+        <h1 className="text-4xl font-semibold tracking-tight">{event.title}</h1>
+      </div>
       <div className="mt-4 grid gap-3 text-sm text-muted-foreground sm:grid-cols-3">
         <div className="flex items-center gap-2">
           <Calendar className="h-4 w-4" />
           <span>
-            {formatInTimeZone(event.starts_at, (event as { time_zone?: string }).time_zone ?? "UTC")}
-            {" "}→{" "}
+            {formatInTimeZone(
+              event.starts_at,
+              (event as { time_zone?: string }).time_zone ?? "UTC",
+            )}{" "}
+            →{" "}
             {formatInTimeZone(event.ends_at, (event as { time_zone?: string }).time_zone ?? "UTC")}
           </span>
         </div>
@@ -206,17 +220,15 @@ function EventDetailsPage() {
         className="mt-8 flex items-center gap-4 rounded-xl border border-border bg-card p-4 transition-colors hover:bg-accent/40"
       >
         <Avatar className="h-12 w-12">
-          {host?.avatar_url && <AvatarImage src={host.avatar_url} alt={host.display_name ?? "Host"} />}
-          <AvatarFallback>
-            {(host?.display_name ?? "H").slice(0, 2).toUpperCase()}
-          </AvatarFallback>
+          {host?.avatar_url && (
+            <AvatarImage src={host.avatar_url} alt={host.display_name ?? "Host"} />
+          )}
+          <AvatarFallback>{(host?.display_name ?? "H").slice(0, 2).toUpperCase()}</AvatarFallback>
         </Avatar>
         <div className="min-w-0 flex-1">
           <p className="text-xs uppercase tracking-wide text-muted-foreground">Hosted by</p>
           <p className="truncate text-sm font-semibold">{host?.display_name ?? "Host"}</p>
-          {host?.bio && (
-            <p className="line-clamp-1 text-xs text-muted-foreground">{host.bio}</p>
-          )}
+          {host?.bio && <p className="line-clamp-1 text-xs text-muted-foreground">{host.bio}</p>}
         </div>
         <span className="text-sm text-primary">View profile →</span>
       </Link>
@@ -224,10 +236,7 @@ function EventDetailsPage() {
       <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-border pt-6">
         {!user ? (
           <Button asChild>
-            <Link
-              to="/auth/sign-in"
-              search={{ redirect: `/events/${event.id}` }}
-            >
+            <Link to="/auth/sign-in" search={{ redirect: `/events/${event.id}` }}>
               Sign in to RSVP
             </Link>
           </Button>
@@ -245,7 +254,9 @@ function EventDetailsPage() {
           </>
         ) : isWaitlisted ? (
           <>
-            <Badge variant="secondary" className="px-3 py-1.5 text-sm">On waitlist</Badge>
+            <Badge variant="secondary" className="px-3 py-1.5 text-sm">
+              On waitlist
+            </Badge>
             <Button variant="ghost" onClick={() => cancel.mutate()} disabled={cancel.isPending}>
               {cancel.isPending ? "Leaving…" : "Leave waitlist"}
             </Button>

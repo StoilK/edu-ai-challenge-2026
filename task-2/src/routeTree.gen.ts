@@ -24,6 +24,7 @@ import { Route as EventsNewRouteImport } from './routes/events.new'
 import { Route as EventsEventIdRouteImport } from './routes/events.$eventId'
 import { Route as AuthSignUpRouteImport } from './routes/auth.sign-up'
 import { Route as AuthSignInRouteImport } from './routes/auth.sign-in'
+import { Route as EventsEventIdEditRouteImport } from './routes/events.$eventId_.edit'
 
 const TeamRoute = TeamRouteImport.update({
   id: '/team',
@@ -100,6 +101,11 @@ const AuthSignInRoute = AuthSignInRouteImport.update({
   path: '/auth/sign-in',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EventsEventIdEditRoute = EventsEventIdEditRouteImport.update({
+  id: '/events/$eventId_/edit',
+  path: '/events/$eventId/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -117,6 +123,7 @@ export interface FileRoutesByFullPath {
   '/invite/$token': typeof InviteTokenRoute
   '/my/events': typeof MyEventsRoute
   '/my/tickets': typeof MyTicketsRoute
+  '/events/$eventId/edit': typeof EventsEventIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -134,6 +141,7 @@ export interface FileRoutesByTo {
   '/invite/$token': typeof InviteTokenRoute
   '/my/events': typeof MyEventsRoute
   '/my/tickets': typeof MyTicketsRoute
+  '/events/$eventId/edit': typeof EventsEventIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -152,6 +160,7 @@ export interface FileRoutesById {
   '/invite/$token': typeof InviteTokenRoute
   '/my/events': typeof MyEventsRoute
   '/my/tickets': typeof MyTicketsRoute
+  '/events/$eventId_/edit': typeof EventsEventIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -171,6 +180,7 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/my/events'
     | '/my/tickets'
+    | '/events/$eventId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -188,6 +198,7 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/my/events'
     | '/my/tickets'
+    | '/events/$eventId/edit'
   id:
     | '__root__'
     | '/'
@@ -205,6 +216,7 @@ export interface FileRouteTypes {
     | '/invite/$token'
     | '/my/events'
     | '/my/tickets'
+    | '/events/$eventId_/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -223,6 +235,7 @@ export interface RootRouteChildren {
   InviteTokenRoute: typeof InviteTokenRoute
   MyEventsRoute: typeof MyEventsRoute
   MyTicketsRoute: typeof MyTicketsRoute
+  EventsEventIdEditRoute: typeof EventsEventIdEditRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -332,6 +345,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignInRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/events/$eventId_/edit': {
+      id: '/events/$eventId_/edit'
+      path: '/events/$eventId/edit'
+      fullPath: '/events/$eventId/edit'
+      preLoaderRoute: typeof EventsEventIdEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -351,6 +371,7 @@ const rootRouteChildren: RootRouteChildren = {
   InviteTokenRoute: InviteTokenRoute,
   MyEventsRoute: MyEventsRoute,
   MyTicketsRoute: MyTicketsRoute,
+  EventsEventIdEditRoute: EventsEventIdEditRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
