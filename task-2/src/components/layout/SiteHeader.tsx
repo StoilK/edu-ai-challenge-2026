@@ -1,5 +1,16 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Calendar, Flag, LogOut, Menu, Plus, ScanLine, Settings, Ticket, User, Users } from "lucide-react";
+import {
+  Calendar,
+  Flag,
+  LogOut,
+  Menu,
+  Plus,
+  ScanLine,
+  Settings,
+  Ticket,
+  User,
+  Users,
+} from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,7 +20,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAuth } from "@/features/auth/AuthProvider";
+import { useAuth } from "@/features/auth/useAuth";
 
 export function SiteHeader() {
   const { user, isHost, isChecker, signOut } = useAuth();

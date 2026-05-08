@@ -2,12 +2,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Flag, EyeOff, Check, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
+import { toUserMessage } from "@/lib/errors";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/common/PageHeader";
 import { EmptyState } from "@/components/common/EmptyState";
 import { LoadingState } from "@/components/common/LoadingState";
-import { useAuth } from "@/features/auth/AuthProvider";
+import { useAuth } from "@/features/auth/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/reports")({
@@ -69,18 +70,14 @@ function ReportsPage() {
         .order("created_at", { ascending: false });
       if (e3) throw e3;
 
-      const reporterIds = Array.from(
-        new Set((reports ?? []).map((r) => r.reporter_id)),
-      );
+      const reporterIds = Array.from(new Set((reports ?? []).map((r) => r.reporter_id)));
       const reporterMap = new Map<string, string>();
       if (reporterIds.length) {
         const { data: profs } = await supabase
           .from("profiles")
-          .select("id, display_name, email")
+          .select("id, display_name")
           .in("id", reporterIds);
-        (profs ?? []).forEach((p) =>
-          reporterMap.set(p.id, p.display_name ?? p.email ?? "Anonymous"),
-        );
+        (profs ?? []).forEach((p) => reporterMap.set(p.id, p.display_name ?? "Anonymous"));
       }
 
       return (reports ?? [])
@@ -123,13 +120,7 @@ function ReportsPage() {
   });
 
   const setStatus = useMutation({
-    mutationFn: async ({
-      id,
-      status,
-    }: {
-      id: string;
-      status: "reviewed" | "dismissed";
-    }) => {
+    mutationFn: async ({ id, status }: { id: string; status: "reviewed" | "dismissed" }) => {
       const { error } = await supabase
         .from("reports")
         .update({
@@ -143,7 +134,7 @@ function ReportsPage() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["reports"] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(toUserMessage(e)),
   });
 
   const hide = useMutation({
@@ -176,7 +167,7 @@ function ReportsPage() {
       qc.invalidateQueries({ queryKey: ["reports"] });
       qc.invalidateQueries({ queryKey: ["hosted-events"] });
     },
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: Error) => toast.error(toUserMessage(e)),
   });
 
   if (loading) return <LoadingState />;
@@ -223,9 +214,7 @@ function ReportsPage() {
                 <ReportRow
                   key={r.id}
                   r={r}
-                  onDismiss={() =>
-                    setStatus.mutate({ id: r.id, status: "dismissed" })
-                  }
+                  onDismiss={() => setStatus.mutate({ id: r.id, status: "dismissed" })}
                   onHide={() => hide.mutate(r)}
                   busy={setStatus.isPending || hide.isPending}
                 />
@@ -267,10 +256,7 @@ function ReportRow({
   busy?: boolean;
   readOnly?: boolean;
 }) {
-  const photoUrl =
-    r.photo_path
-      ? supabase.storage.from("event-photos").getPublicUrl(r.photo_path).data.publicUrl
-      : null;
+  const photoUrl = r.photo_path ?? null;
 
   return (
     <div className="rounded-xl border border-border bg-card p-4 shadow-[var(--shadow-sm)]">
@@ -282,9 +268,7 @@ function ReportRow({
             </Badge>
             {r.status === "open" && <Badge>Open</Badge>}
             {r.status === "reviewed" && <Badge variant="secondary">Reviewed</Badge>}
-            {r.status === "dismissed" && (
-              <Badge variant="outline">Dismissed</Badge>
-            )}
+            {r.status === "dismissed" && <Badge variant="outline">Dismissed</Badge>}
             {r.target_type === "photo" && r.photo_approved === false && (
               <Badge variant="outline">Hidden</Badge>
             )}
@@ -297,8 +281,7 @@ function ReportRow({
             {r.event_title} <ExternalLink className="h-3.5 w-3.5" />
           </Link>
           <p className="mt-1 text-xs text-muted-foreground">
-            Reported by {r.reporter_name} ·{" "}
-            {new Date(r.created_at).toLocaleString()}
+            Reported by {r.reporter_name} · {new Date(r.created_at).toLocaleString()}
           </p>
         </div>
         {photoUrl && (

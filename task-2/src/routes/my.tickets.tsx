@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/common/PageHeader";
 import { EmptyState } from "@/components/common/EmptyState";
 import { LoadingState } from "@/components/common/LoadingState";
-import { useAuth } from "@/features/auth/AuthProvider";
+import { useAuth } from "@/features/auth/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { buildICS, downloadICS } from "@/lib/ics";
 
@@ -35,9 +35,7 @@ function MyTicketsPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("tickets")
-        .select(
-          "*, event:events(id, title, starts_at, ends_at, location, description, host_id)",
-        )
+        .select("*, event:events(id, title, starts_at, ends_at, location, description, host_id)")
         .eq("user_id", user!.id)
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -49,15 +47,13 @@ function MyTicketsPage() {
       if (hostIds.length) {
         const { data: hosts } = await supabase
           .from("profiles")
-          .select("id, display_name, email")
+          .select("id, display_name")
           .in("id", hostIds);
-        (hosts ?? []).forEach((h) =>
-          hostMap.set(h.id, h.display_name ?? h.email ?? "Host"),
-        );
+        (hosts ?? []).forEach((h) => hostMap.set(h.id, h.display_name ?? "Host"));
       }
       return tickets.map((t) => ({
         ...t,
-        host_name: t.event?.host_id ? hostMap.get(t.event.host_id) ?? "Host" : "Host",
+        host_name: t.event?.host_id ? (hostMap.get(t.event.host_id) ?? "Host") : "Host",
       }));
     },
   });
@@ -121,21 +117,15 @@ function MyTicketsPage() {
                     )}
                   </div>
                   <p className="mt-1 text-sm opacity-90">
-                    {t.event?.starts_at
-                      ? new Date(t.event.starts_at).toLocaleString()
-                      : "—"}
+                    {t.event?.starts_at ? new Date(t.event.starts_at).toLocaleString() : "—"}
                   </p>
                 </div>
                 <div className="space-y-2 border-t border-border p-4 text-sm">
                   <div className="flex items-start gap-2">
                     <Calendar className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
                     <span>
-                      {t.event?.starts_at
-                        ? new Date(t.event.starts_at).toLocaleString()
-                        : "—"}
-                      {t.event?.ends_at
-                        ? ` → ${new Date(t.event.ends_at).toLocaleString()}`
-                        : ""}
+                      {t.event?.starts_at ? new Date(t.event.starts_at).toLocaleString() : "—"}
+                      {t.event?.ends_at ? ` → ${new Date(t.event.ends_at).toLocaleString()}` : ""}
                       {t.event?.starts_at && t.event?.ends_at && (
                         <span className="ml-1 text-muted-foreground">
                           ({formatDuration(t.event.starts_at, t.event.ends_at)})
@@ -178,7 +168,9 @@ function MyTicketsPage() {
                   {t.checked_in_at ? (
                     <Badge className="shrink-0">Checked in</Badge>
                   ) : (
-                    <Badge variant="outline" className="shrink-0">Not checked in</Badge>
+                    <Badge variant="outline" className="shrink-0">
+                      Not checked in
+                    </Badge>
                   )}
                 </div>
                 {t.event && (

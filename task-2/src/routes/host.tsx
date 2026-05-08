@@ -2,13 +2,15 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import { toUserMessage } from "@/lib/errors";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/common/PageHeader";
-import { useAuth } from "@/features/auth/AuthProvider";
+import { useAuth } from "@/features/auth/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { fileToDataUrl } from "@/lib/image";
 
 export const Route = createFileRoute("/host")({
   component: HostLandingPage,
@@ -29,10 +31,10 @@ function HostLandingPage() {
     (async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("contact_email, email, display_name, bio, avatar_url")
+        .select("contact_email, display_name, bio, avatar_url")
         .eq("id", user.id)
         .maybeSingle();
-      setContactEmail(data?.contact_email ?? data?.email ?? "");
+      setContactEmail(data?.contact_email ?? "");
       setDisplayName(data?.display_name ?? "");
       setBio(data?.bio ?? "");
       setAvatarUrl(data?.avatar_url ?? "");
@@ -42,10 +44,8 @@ function HostLandingPage() {
 
   const becomeHost = async () => {
     if (!user) return navigate({ to: "/auth/sign-up" });
-    const { error } = await supabase
-      .from("user_roles")
-      .insert({ user_id: user.id, role: "host" });
-    if (error && !error.message.includes("duplicate")) return toast.error(error.message);
+    const { error } = await supabase.from("user_roles").insert({ user_id: user.id, role: "host" });
+    if (error && !error.message.includes("duplicate")) return toast.error(toUserMessage(error));
     await supabase.from("profiles").update({ is_host: true }).eq("id", user.id);
     await refreshRoles();
     toast.success("You're a host now!");
@@ -65,7 +65,7 @@ function HostLandingPage() {
       })
       .eq("id", user.id);
     setSavingProfile(false);
-    if (error) return toast.error(error.message);
+    if (error) return toast.error(toUserMessage(error));
     toast.success("Host profile updated");
   };
 
@@ -130,13 +130,38 @@ function HostLandingPage() {
               />
             </div>
             <div className="sm:col-span-2">
-              <Label htmlFor="avatar_url">Logo / avatar URL</Label>
-              <Input
-                id="avatar_url"
-                value={avatarUrl}
-                placeholder="https://…/logo.png"
-                onChange={(e) => setAvatarUrl(e.target.value)}
-              />
+              <Label htmlFor="avatar_url">Logo / avatar</Label>
+              <div className="mt-1 flex items-start gap-3">
+                {avatarUrl && (
+                  <img
+                    src={avatarUrl}
+                    alt="Avatar preview"
+                    className="h-16 w-16 rounded-full border border-border object-cover"
+                  />
+                )}
+                <div className="flex-1 space-y-2">
+                  <Input
+                    id="avatar_url"
+                    value={avatarUrl}
+                    placeholder="https://…/logo.png or upload below"
+                    onChange={(e) => setAvatarUrl(e.target.value)}
+                  />
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={async (e) => {
+                      const f = e.target.files?.[0];
+                      if (!f) return;
+                      try {
+                        const dataUrl = await fileToDataUrl(f, { maxDim: 512 });
+                        setAvatarUrl(dataUrl);
+                      } catch (err) {
+                        toast.error(toUserMessage(err));
+                      }
+                    }}
+                  />
+                </div>
+              </div>
             </div>
             <div className="sm:col-span-2">
               <Label htmlFor="bio">Short bio</Label>
