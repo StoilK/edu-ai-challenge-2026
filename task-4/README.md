@@ -140,18 +140,6 @@ Optional: add a normal flight without `minRunwayLengthMeters`. `generate_schedul
 
 ---
 
-## Submission artifacts
-
-| File | Purpose |
-|------|---------|
-| `task-4/` | MCP server source |
-| [README.md](./README.md) | Install, env vars, run, MCP tools/resources |
-| [report.md](./report.md) | Scheduling approach, decisions, tools, lessons learned |
-
-Ensure the GitHub repository is **public** before submission.
-
----
-
 ## Project layout
 
 ```
