@@ -177,7 +177,7 @@ scripts/
     "atc": {
       "command": "npm",
       "args": ["run", "dev"],
-      "cwd": "D:/AI Challenge/edu-ai-challenge-2026/task-4",
+      "cwd": "D:/example/ai-challenge/task-4",
       "env": {
         "ATC_RUNWAY_LENGTHS": "2500,3000,3500",
         "ATC_GATE_COUNT": "4",
