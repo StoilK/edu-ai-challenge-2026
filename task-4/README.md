@@ -2,8 +2,6 @@
 
 AI-ready **Air Traffic Control** server using the [Model Context Protocol](https://modelcontextprotocol.io/). It schedules arrivals and departures, respects runways/gates/ground crew limits, handles flight dependencies and cancellations, and exposes airport state through MCP **tools** and **resources**.
 
-**All implementation steps are complete.** See [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md) for the build log and [report.md](./report.md) for scheduling approach and design notes (submission requirement).
-
 ---
 
 ## Quick start
